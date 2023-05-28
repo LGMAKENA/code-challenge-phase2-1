@@ -1,22 +1,39 @@
-import React from "react";
+import React from 'react';
 
 const botTypeClasses = {
-  Assault: "icon military",
-  Defender: "icon shield",
-  Support: "icon plus circle",
-  Medic: "icon ambulance",
-  Witch: "icon magic",
-  Captain: "icon star",
+  Assault: 'icon military',
+  Defender: 'icon shield',
+  Support: 'icon plus circle',
+  Medic: 'icon ambulance',
+  Witch: 'icon magic',
+  Captain: 'icon star',
 };
 
-function BotCard({ bot }) {
+function BotCard({ bot, setBotsArmy, deleteHandler }) {
+  function addBotHanlder(event) {
+    if (event.target.classList.contains('button')) {
+      return;
+    }
+    setBotsArmy(currentState => {
+      //find whether a bot is added
+      const isBotAdded = currentState.find(el => el.id === bot.id);
+      //if bot is found
+      if (isBotAdded) {
+        return currentState;
+      } else {
+        return [...currentState, bot];
+      }
+    });
+  }
+
+  function onRemoveHandler(event) {
+    // console.log(event.target);
+    deleteHandler(bot.id);
+  }
+
   return (
     <div className="ui column">
-      <div
-        className="ui card"
-        key={bot.id}
-        onClick={() => console.log("add code to connect event listener")}
-      >
+      <div className="ui card" key={bot.id} onClick={addBotHanlder}>
         <div className="image">
           <img alt="oh no!" src={bot.avatar_url} />
         </div>
@@ -45,12 +62,7 @@ function BotCard({ bot }) {
           </span>
           <span>
             <div className="ui center aligned segment basic">
-              <button
-                className="ui mini red button"
-                onClick={() =>
-                  console.log("add code to connect event listener")
-                }
-              >
+              <button className="ui mini red button" onClick={onRemoveHandler}>
                 x
               </button>
             </div>
